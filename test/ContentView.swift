@@ -24,12 +24,88 @@ struct FirstPage: View {
     }
 }
 
+struct SecondPage: View {
+    
+        let items : [String] = ["任天堂", "ソニー", "トヨタ", "ユニクロ","A株式会社", "Bカンパニー", "C.com", "DDD","E社","eee","Eカンパニー","eスポーツ協会","ee-ne!!"]
+            
+        @State var isEditing = false
+        @State var searchText = ""
+        
+        var filterdItems: [String] {
+                if searchText.isEmpty {
+                    return items
+                } else {
+                    return items.filter {$0.uppercased().contains(searchText.uppercased())}
+                }
+            }
+        var body: some View {
+            VStack {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search", text: $searchText, onEditingChanged: { isEditing in
+                        self.isEditing = isEditing
+                    })
+                    if isEditing {
+                        Button(action: {
+                            self.searchText = ""
+                        }){
+                        Image(systemName: "multiply.circle.fill")
+                                            .foregroundColor(.gray)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .padding()
+                
+                List {
+                    ForEach(filterdItems, id: \.self) { item in
+                        Text(item)
+                    }
+                }
+            }
+        }
+}
+
+struct ThirdPage: View {
+        @State private var items = ["任天堂", "ソニー", "トヨタ", "ユニクロ"]
+     
+        var body: some View {
+            NavigationView {
+            List {
+                ForEach(items, id: \.self) { item in
+                    Text(item)
+                }
+                .onDelete(perform: rowRemove)
+                .onMove(perform: rowReplace)
+            }
+            .navigationBarTitle("")
+            .listStyle(InsetGroupedListStyle())
+            .toolbar {
+                EditButton()
+            }
+            }
+        }
+
+        func rowRemove(offsets: IndexSet) {
+            items.remove(atOffsets: offsets)
+        }
+    
+        func rowReplace(_ from: IndexSet, _ to: Int) {
+            items.move(fromOffsets: from, toOffset: to)
+        }
+}
+
+//struct FourthPage: View {
+//
+//}
+
 struct DetailView: View {
     @State var selectedIndex = 0
 
     var body: some View {
         
-        Text("企業名")
+        Text("企業名（企業コード）")
         
         Picker("", selection: $selectedIndex) {
             Text("BS")
@@ -39,6 +115,7 @@ struct DetailView: View {
             Text("CF")
                 .tag(2)
         }.pickerStyle(SegmentedPickerStyle())
+        Text("ここにシートを表示")
         
         Spacer()
     }
@@ -53,21 +130,26 @@ struct ContentView: View {
                     Image(systemName: "house")
                     Text("ホーム")
                 }
-            Text("検索")
+            SecondPage()
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("検索")
                 }
-            Text("お気に入り")
+            ThirdPage()
                 .tabItem {
                     Image(systemName: "star")
                     Text("お気に入り")
                 }
-            Text("設定")
+            Text("メモ")
                 .tabItem {
-                    Image(systemName: "slider.horizontal.3")
-                    Text("設定")
+                Image(systemName: "square.and.pencil")
+                   Text("メモ")
                 }
+//            FourthPage()
+//                .tabItem {
+//                    Image(systemName: "square.and.pencil")
+//                    Text("メモ")
+//                }
         }
     }
 }
