@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FirstPage: View {
-    let items = ["任天堂", "ソニー", "トヨタ", "ユニクロ"]
+    let items = ["任天堂（500039395）", "ソニー（981245683）", "トヨタ（400094643）", "ユニクロ（770004185）"]
 
     var body: some View {
         NavigationView {
@@ -26,7 +26,7 @@ struct FirstPage: View {
 
 struct SecondPage: View {
     
-        let items : [String] = ["任天堂", "ソニー", "トヨタ", "ユニクロ","A株式会社", "Bカンパニー", "C.com", "DDD","E社","eee","Eカンパニー","eスポーツ協会","ee-ne!!"]
+        let items : [String] = ["任天堂（500039395）", "ソニー（981245683）", "トヨタ（400094643）", "ユニクロ（770004185）", "A株式会社（1111111）", "Bカンパニー（2222222）", "C.com（3333333）", "ユニDDD（4444444）", "DDD（555555）","E社（66666666）","eee（7777777）","Eカンパニー（88888888）","eスポーツ協会（9999999）","ee-ne!!（00000000）"]
             
         @State var isEditing = false
         @State var searchText = ""
@@ -68,13 +68,15 @@ struct SecondPage: View {
 }
 
 struct ThirdPage: View {
-        @State private var items = ["任天堂", "ソニー", "トヨタ", "ユニクロ"]
+        @State private var items = ["任天堂（500039395）", "ソニー（981245683）", "トヨタ（400094643）", "ユニクロ（770004185）"]
      
         var body: some View {
             NavigationView {
             List {
                 ForEach(items, id: \.self) { item in
+                    NavigationLink(destination: DetailView()) {
                     Text(item)
+                    }
                 }
                 .onDelete(perform: rowRemove)
                 .onMove(perform: rowReplace)
@@ -95,10 +97,6 @@ struct ThirdPage: View {
             items.move(fromOffsets: from, toOffset: to)
         }
 }
-
-//struct FourthPage: View {
-//
-//}
 
 struct DetailView: View {
     @State var selectedIndex = 0
